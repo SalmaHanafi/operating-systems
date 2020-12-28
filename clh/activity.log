@@ -1,0 +1,1512 @@
+===================================
+Wed Oct 16 17:38:19 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ [K]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ ls
+readme
+]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ cat readme
+boJ9jbbUNNfktd78OOpsqOltutMc3MY1
+]0;bandit0@bandit: ~[01;32mbandit0@bandit[00m:[01;34m~[00m$ exit
+logout
+===================================
+Wed Oct 16 17:40:42 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+]0;bandit1@bandit: ~[01;32mbandit1@bandit[00m:[01;34m~[00m$ ls
+-
+]0;bandit1@bandit: ~[01;32mbandit1@bandit[00m:[01;34m~[00m$ cat.[K ./-
+CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
+]0;bandit1@bandit: ~[01;32mbandit1@bandit[00m:[01;34m~[00m$ exit
+logout
+===================================
+Wed Oct 16 17:43:04 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+]0;bandit2@bandit: ~[01;32mbandit2@bandit[00m:[01;34m~[00m$ ls
+spaces in this filename
+]0;bandit2@bandit: ~[01;32mbandit2@bandit[00m:[01;34m~[00m$ cat ""s"p"a"c"e"s" "i"n" "t"h"i"s" "f"i"l"e"n"a"m"e"
+UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
+]0;bandit2@bandit: ~[01;32mbandit2@bandit[00m:[01;34m~[00m$ exit
+logout
+===================================
+Wed Oct 16 17:44:35 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+]0;bandit3@bandit: ~[01;32mbandit3@bandit[00m:[01;34m~[00m$ ld
+ld: no input files
+]0;bandit3@bandit: ~[01;32mbandit3@bandit[00m:[01;34m~[00m$ ls
+[0m[01;34minhere[0m
+]0;bandit3@bandit: ~[01;32mbandit3@bandit[00m:[01;34m~[00m$ ls -la
+total 24
+drwxr-xr-x  3 root root 4096 Oct 16  2018 [0m[01;34m.[0m
+drwxr-xr-x 41 root root 4096 Oct 16  2018 [01;34m..[0m
+-rw-r--r--  1 root root  220 May 15  2017 .bash_logout
+-rw-r--r--  1 root root 3526 May 15  2017 .bashrc
+drwxr-xr-x  2 root root 4096 Oct 16  2018 [01;34minhere[0m
+-rw-r--r--  1 root root  675 May 15  2017 .profile
+]0;bandit3@bandit: ~[01;32mbandit3@bandit[00m:[01;34m~[00m$ ls -la[K[K[K[K[K[Kcd inhere
+]0;bandit3@bandit: ~/inhere[01;32mbandit3@bandit[00m:[01;34m~/inhere[00m$ le[Ks -la
+total 12
+drwxr-xr-x 2 root    root    4096 Oct 16  2018 [0m[01;34m.[0m
+drwxr-xr-x 3 root    root    4096 Oct 16  2018 [01;34m..[0m
+-rw-r----- 1 bandit4 bandit3   33 Oct 16  2018 .hidden
+]0;bandit3@bandit: ~/inhere[01;32mbandit3@bandit[00m:[01;34m~/inhere[00m$ xat h[K[K[K[K[Kcat .hidden
+pIwrPrtPN36QITSp3EQaw936yaFoFgAB
+]0;bandit3@bandit: ~/inhere[01;32mbandit3@bandit[00m:[01;34m~/inhere[00m$ exit
+logout
+===================================
+Wed Oct 16 17:48:38 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+]0;bandit4@bandit: ~[01;32mbandit4@bandit[00m:[01;34m~[00m$ reser
+-bash: reser: command not found
+]0;bandit4@bandit: ~[01;32mbandit4@bandit[00m:[01;34m~[00m$ reset
+c]104[!p[?3;4l[4l>]0;bandit4@bandit: ~[01;32mbandit4@bandit[00m:[01;34m~[00m$ cd [K inhere
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ ls -la[K[K[K[K
+-file00  -file01  -file02  -file03  -file04  -file05  -file06  -file07  -file08  -file09
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ file ./-file00*
+./-file00: data
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ file ./-file01*
+./-file01: data
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ file ./-file02*
+./-file02: data
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ file ./-file02*[K[K3*
+./-file03: data
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ file ./-file03*2*[K[K48[K*
+./-file04: data
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ file ./-file04*3*4*[1P*5*
+./-file05: data
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ file ./-file05*4*[1P*6*
+./-file06: data
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ file ./-file06*5*[1P*7*
+./-file07: ASCII text
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ cat ./-file07
+koReBOKuIDDepwhWk7jZC0RTdopnAYKh
+]0;bandit4@bandit: ~/inhere[01;32mbandit4@bandit[00m:[01;34m~/inhere[00m$ exit
+logout
+===================================
+Wed Oct 16 17:51:53 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+]0;bandit5@bandit: ~[01;32mbandit5@bandit[00m:[01;34m~[00m$ cd un[K[Kinhere
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ ls
+[0m[01;34mmaybehere00[0m  [01;34mmaybehere02[0m  [01;34mmaybehere04[0m  [01;34mmaybehere06[0m  [01;34mmaybehere08[0m  [01;34mmaybehere10[0m  [01;34mmaybehere12[0m  [01;34mmaybehere14[0m  [01;34mmaybehere16[0m  [01;34mmaybehere18[0m
+[01;34mmaybehere01[0m  [01;34mmaybehere03[0m  [01;34mmaybehere05[0m  [01;34mmaybehere07[0m  [01;34mmaybehere09[0m  [01;34mmaybehere11[0m  [01;34mmaybehere13[0m  [01;34mmaybehere15[0m  [01;34mmaybehere17[0m  [01;34mmaybehere19[0m
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ fu[Kind * -size [C[C[C[C[C[C1033c
+maybehere07/.file2
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ cd maybehere07
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ ls
+[0m[01;32m-file1[0m  -file2  [01;32m-file3[0m  [01;32mspaces file1[0m  spaces file2  [01;32mspaces file3[0m
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ file ./-file2*
+./-file2: ASCII text, with very long lines
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ cd ..
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ find *-executav[Kble
+find: ‘*-executable’: No such file or directory
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ cd maybehere07
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ cd maybehere07find *-executable
+find: ‘*-executable’: No such file or directory
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ find * -ece[K[Kxecutable
+find: unknown predicate `-file1'
+Try 'find --help' for more information.
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ cd ..
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ find * - [Kexecutable[C
+maybehere00
+maybehere00/.file1
+maybehere00/-file3
+maybehere00/-file1
+maybehere00/spaces file3
+maybehere00/spaces file1
+maybehere00/.file3
+maybehere01
+maybehere01/.file1
+maybehere01/-file3
+maybehere01/-file1
+maybehere01/spaces file3
+maybehere01/spaces file1
+maybehere01/.file3
+maybehere02
+maybehere02/.file1
+maybehere02/-file3
+maybehere02/-file1
+maybehere02/spaces file3
+maybehere02/spaces file1
+maybehere02/.file3
+maybehere03
+maybehere03/.file1
+maybehere03/-file3
+maybehere03/-file1
+maybehere03/spaces file3
+maybehere03/spaces file1
+maybehere03/.file3
+maybehere04
+maybehere04/.file1
+maybehere04/-file3
+maybehere04/-file1
+maybehere04/spaces file3
+maybehere04/spaces file1
+maybehere04/.file3
+maybehere05
+maybehere05/.file1
+maybehere05/-file3
+maybehere05/-file1
+maybehere05/spaces file3
+maybehere05/spaces file1
+maybehere05/.file3
+maybehere06
+maybehere06/.file1
+maybehere06/-file3
+maybehere06/-file1
+maybehere06/spaces file3
+maybehere06/spaces file1
+maybehere06/.file3
+maybehere07
+maybehere07/.file1
+maybehere07/-file3
+maybehere07/-file1
+maybehere07/spaces file3
+maybehere07/spaces file1
+maybehere07/.file3
+maybehere08
+maybehere08/.file1
+maybehere08/-file3
+maybehere08/-file1
+maybehere08/spaces file3
+maybehere08/spaces file1
+maybehere08/.file3
+maybehere09
+maybehere09/.file1
+maybehere09/-file3
+maybehere09/-file1
+maybehere09/spaces file3
+maybehere09/spaces file1
+maybehere09/.file3
+maybehere10
+maybehere10/.file1
+maybehere10/-file3
+maybehere10/-file1
+maybehere10/spaces file3
+maybehere10/spaces file1
+maybehere10/.file3
+maybehere11
+maybehere11/.file1
+maybehere11/-file3
+maybehere11/-file1
+maybehere11/spaces file3
+maybehere11/spaces file1
+maybehere11/.file3
+maybehere12
+maybehere12/.file1
+maybehere12/-file3
+maybehere12/-file1
+maybehere12/spaces file3
+maybehere12/spaces file1
+maybehere12/.file3
+maybehere13
+maybehere13/.file1
+maybehere13/-file3
+maybehere13/-file1
+maybehere13/spaces file3
+maybehere13/spaces file1
+maybehere13/.file3
+maybehere14
+maybehere14/.file1
+maybehere14/-file3
+maybehere14/-file1
+maybehere14/spaces file3
+maybehere14/spaces file1
+maybehere14/.file3
+maybehere15
+maybehere15/.file1
+maybehere15/-file3
+maybehere15/-file1
+maybehere15/spaces file3
+maybehere15/spaces file1
+maybehere15/.file3
+maybehere16
+maybehere16/.file1
+maybehere16/-file3
+maybehere16/-file1
+maybehere16/spaces file3
+maybehere16/spaces file1
+maybehere16/.file3
+maybehere17
+maybehere17/.file1
+maybehere17/-file3
+maybehere17/-file1
+maybehere17/spaces file3
+maybehere17/spaces file1
+maybehere17/.file3
+maybehere18
+maybehere18/.file1
+maybehere18/-file3
+maybehere18/-file1
+maybehere18/spaces file3
+maybehere18/spaces file1
+maybehere18/.file3
+maybehere19
+maybehere19/.file1
+maybehere19/-file3
+maybehere19/-file1
+maybehere19/spaces file3
+maybehere19/spaces file1
+maybehere19/.file3
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ find * -readable
+maybehere00
+maybehere00/.file2
+maybehere00/.file1
+maybehere00/-file3
+maybehere00/-file2
+maybehere00/-file1
+maybehere00/spaces file3
+maybehere00/spaces file2
+maybehere00/spaces file1
+maybehere00/.file3
+maybehere01
+maybehere01/.file2
+maybehere01/.file1
+maybehere01/-file3
+maybehere01/-file2
+maybehere01/-file1
+maybehere01/spaces file3
+maybehere01/spaces file2
+maybehere01/spaces file1
+maybehere01/.file3
+maybehere02
+maybehere02/.file2
+maybehere02/.file1
+maybehere02/-file3
+maybehere02/-file2
+maybehere02/-file1
+maybehere02/spaces file3
+maybehere02/spaces file2
+maybehere02/spaces file1
+maybehere02/.file3
+maybehere03
+maybehere03/.file2
+maybehere03/.file1
+maybehere03/-file3
+maybehere03/-file2
+maybehere03/-file1
+maybehere03/spaces file3
+maybehere03/spaces file2
+maybehere03/spaces file1
+maybehere03/.file3
+maybehere04
+maybehere04/.file2
+maybehere04/.file1
+maybehere04/-file3
+maybehere04/-file2
+maybehere04/-file1
+maybehere04/spaces file3
+maybehere04/spaces file2
+maybehere04/spaces file1
+maybehere04/.file3
+maybehere05
+maybehere05/.file2
+maybehere05/.file1
+maybehere05/-file3
+maybehere05/-file2
+maybehere05/-file1
+maybehere05/spaces file3
+maybehere05/spaces file2
+maybehere05/spaces file1
+maybehere05/.file3
+maybehere06
+maybehere06/.file2
+maybehere06/.file1
+maybehere06/-file3
+maybehere06/-file2
+maybehere06/-file1
+maybehere06/spaces file3
+maybehere06/spaces file2
+maybehere06/spaces file1
+maybehere06/.file3
+maybehere07
+maybehere07/.file2
+maybehere07/.file1
+maybehere07/-file3
+maybehere07/-file2
+maybehere07/-file1
+maybehere07/spaces file3
+maybehere07/spaces file2
+maybehere07/spaces file1
+maybehere07/.file3
+maybehere08
+maybehere08/.file2
+maybehere08/.file1
+maybehere08/-file3
+maybehere08/-file2
+maybehere08/-file1
+maybehere08/spaces file3
+maybehere08/spaces file2
+maybehere08/spaces file1
+maybehere08/.file3
+maybehere09
+maybehere09/.file2
+maybehere09/.file1
+maybehere09/-file3
+maybehere09/-file2
+maybehere09/-file1
+maybehere09/spaces file3
+maybehere09/spaces file2
+maybehere09/spaces file1
+maybehere09/.file3
+maybehere10
+maybehere10/.file2
+maybehere10/.file1
+maybehere10/-file3
+maybehere10/-file2
+maybehere10/-file1
+maybehere10/spaces file3
+maybehere10/spaces file2
+maybehere10/spaces file1
+maybehere10/.file3
+maybehere11
+maybehere11/.file2
+maybehere11/.file1
+maybehere11/-file3
+maybehere11/-file2
+maybehere11/-file1
+maybehere11/spaces file3
+maybehere11/spaces file2
+maybehere11/spaces file1
+maybehere11/.file3
+maybehere12
+maybehere12/.file2
+maybehere12/.file1
+maybehere12/-file3
+maybehere12/-file2
+maybehere12/-file1
+maybehere12/spaces file3
+maybehere12/spaces file2
+maybehere12/spaces file1
+maybehere12/.file3
+maybehere13
+maybehere13/.file2
+maybehere13/.file1
+maybehere13/-file3
+maybehere13/-file2
+maybehere13/-file1
+maybehere13/spaces file3
+maybehere13/spaces file2
+maybehere13/spaces file1
+maybehere13/.file3
+maybehere14
+maybehere14/.file2
+maybehere14/.file1
+maybehere14/-file3
+maybehere14/-file2
+maybehere14/-file1
+maybehere14/spaces file3
+maybehere14/spaces file2
+maybehere14/spaces file1
+maybehere14/.file3
+maybehere15
+maybehere15/.file2
+maybehere15/.file1
+maybehere15/-file3
+maybehere15/-file2
+maybehere15/-file1
+maybehere15/spaces file3
+maybehere15/spaces file2
+maybehere15/spaces file1
+maybehere15/.file3
+maybehere16
+maybehere16/.file2
+maybehere16/.file1
+maybehere16/-file3
+maybehere16/-file2
+maybehere16/-file1
+maybehere16/spaces file3
+maybehere16/spaces file2
+maybehere16/spaces file1
+maybehere16/.file3
+maybehere17
+maybehere17/.file2
+maybehere17/.file1
+maybehere17/-file3
+maybehere17/-file2
+maybehere17/-file1
+maybehere17/spaces file3
+maybehere17/spaces file2
+maybehere17/spaces file1
+maybehere17/.file3
+maybehere18
+maybehere18/.file2
+maybehere18/.file1
+maybehere18/-file3
+maybehere18/-file2
+maybehere18/-file1
+maybehere18/spaces file3
+maybehere18/spaces file2
+maybehere18/spaces file1
+maybehere18/.file3
+maybehere19
+maybehere19/.file2
+maybehere19/.file1
+maybehere19/-file3
+maybehere19/-file2
+maybehere19/-file1
+maybehere19/spaces file3
+maybehere19/spaces file2
+maybehere19/spaces file1
+maybehere19/.file3
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ cd maybehere07
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ find * -size 1033c
+find: unknown predicate `-file1'
+Try 'find --help' for more information.
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ cd ..
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ find * -size 1033c
+maybehere07/.file2
+]0;bandit5@bandit: ~/inhere[01;32mbandit5@bandit[00m:[01;34m~/inhere[00m$ cd maybehere07
+]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ cat file[K[K[K[K.file2
+DXjZPULLxYr17uwoI01bNLQbtFemEgo7
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ]0;bandit5@bandit: ~/inhere/maybehere07[01;32mbandit5@bandit[00m:[01;34m~/inhere/maybehere07[00m$ exit
+logout
+===================================
+Wed Oct 16 17:58:51 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ ls
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ ls -la
+total 20
+drwxr-xr-x  2 root root 4096 Oct 16  2018 [0m[01;34m.[0m
+drwxr-xr-x 41 root root 4096 Oct 16  2018 [01;34m..[0m
+-rw-r--r--  1 root root  220 May 15  2017 .bash_logout
+-rw-r--r--  1 root root 3526 May 15  2017 .bashrc
+-rw-r--r--  1 root root  675 May 15  2017 .profile
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ find / -user bob –group group1[C[C[C[C[1P[1P[1P[1P[C[1@ [1P[C[C[C[C[C[C[C[C[C[C[1@b[1@a[1@n[1@d[1@i[1@t[1@7[C[1@ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[K[K[K[K[K[K bandit6
+-bash: find/: No such file or directory
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ find / -user bob –group group1[C[C[1P[1P[1P[C[C[1P[C[1@ [1@b[1@a[1@n[1@d[1@i[1@t[1@7[C[C[C[C[C[C[C[C[C[C[C[C[C[1P1[1P1[1P1[1P1[C[K[Kbandit7[K6
+find: paths must precede expression: –group
+Try 'find --help' for more information.
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ cd inhere
+-bash: cd: inhere: No such file or directory
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ cd inherefind / -user bandit7 –group bandit6[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+find: paths must precede expression: –group
+Try 'find --help' for more information.
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ find / -user bandit7 -group bandit6
+find: ‘/run/lvm’: Permission denied
+find: ‘/run/screen/S-bandit5’: Permission denied
+find: ‘/run/screen/S-bandit25’: Permission denied
+find: ‘/run/screen/S-bandit29’: Permission denied
+find: ‘/run/screen/S-bandit1’: Permission denied
+find: ‘/run/screen/S-bandit7’: Permission denied
+find: ‘/run/screen/S-bandit14’: Permission denied
+find: ‘/run/screen/S-bandit16’: Permission denied
+find: ‘/run/screen/S-bandit26’: Permission denied
+find: ‘/run/screen/S-bandit15’: Permission denied
+find: ‘/run/screen/S-bandit13’: Permission denied
+find: ‘/run/screen/S-bandit33’: Permission denied
+find: ‘/run/screen/S-bandit4’: Permission denied
+find: ‘/run/screen/S-bandit24’: Permission denied
+find: ‘/run/screen/S-bandit28’: Permission denied
+find: ‘/run/screen/S-bandit30’: Permission denied
+find: ‘/run/screen/S-bandit10’: Permission denied
+find: ‘/run/screen/S-bandit8’: Permission denied
+find: ‘/run/screen/S-bandit27’: Permission denied
+find: ‘/run/screen/S-bandit0’: Permission denied
+find: ‘/run/screen/S-bandit18’: Permission denied
+find: ‘/run/screen/S-bandit22’: Permission denied
+find: ‘/run/screen/S-bandit31’: Permission denied
+find: ‘/run/screen/S-bandit19’: Permission denied
+find: ‘/run/screen/S-bandit21’: Permission denied
+find: ‘/run/screen/S-bandit23’: Permission denied
+find: ‘/run/screen/S-bandit20’: Permission denied
+find: ‘/run/shm’: Permission denied
+find: ‘/run/lock/lvm’: Permission denied
+find: ‘/var/spool/bandit24’: Permission denied
+find: ‘/var/spool/rsyslog’: Permission denied
+find: ‘/var/spool/cron/crontabs’: Permission denied
+find: ‘/var/log’: Permission denied
+find: ‘/var/tmp’: Permission denied
+find: ‘/var/cache/ldconfig’: Permission denied
+find: ‘/var/cache/apt/archives/partial’: Permission denied
+/var/lib/dpkg/info/bandit7.password
+find: ‘/var/lib/apt/lists/partial’: Permission denied
+find: ‘/var/lib/polkit-1’: Permission denied
+find: ‘/cgroup2/csessions’: Permission denied
+find: ‘/home/bandit28-git’: Permission denied
+find: ‘/home/bandit30-git’: Permission denied
+find: ‘/home/bandit31-git’: Permission denied
+find: ‘/home/bandit5/inhere’: Permission denied
+find: ‘/home/bandit27-git’: Permission denied
+find: ‘/home/bandit29-git’: Permission denied
+find: ‘/tmp’: Permission denied
+find: ‘/lost+found’: Permission denied
+find: ‘/root’: Permission denied
+find: ‘/etc/ssl/private’: Permission denied
+find: ‘/etc/lvm/backup’: Permission denied
+find: ‘/etc/lvm/archive’: Permission denied
+find: ‘/etc/polkit-1/localauthority’: Permission denied
+find: ‘/sys/fs/pstore’: Permission denied
+find: ‘/proc/tty/driver’: Permission denied
+find: ‘/proc/15231/task/15231/fd/6’: No such file or directory
+find: ‘/proc/15231/task/15231/fdinfo/6’: No such file or directory
+find: ‘/proc/15231/fd/5’: No such file or directory
+find: ‘/proc/15231/fdinfo/5’: No such file or directory
+find: ‘/boot/lost+found’: Permission denied
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ find * -size 1033c[C[C[C[1Pc[1Pc[1Pc[1Pc3c3c
+find: ‘*’: No such file or directory
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ find * -size 33c
+find: ‘*’: No such file or directory
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ cat/var/lib/dpkg/info/bandit7.password
+-bash: cat/var/lib/dpkg/info/bandit7.password: No such file or directory
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ cat /var/lib/dpkg/info/bandit7.password
+HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs
+]0;bandit6@bandit: ~[01;32mbandit6@bandit[00m:[01;34m~[00m$ exit
+logout
+===================================
+Wed Oct 16 18:08:36 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+]0;bandit7@bandit: ~[01;32mbandit7@bandit[00m:[01;34m~[00m$ [K]0;bandit7@bandit: ~[01;32mbandit7@bandit[00m:[01;34m~[00m$ timed out waiting for input: auto-logout
+===================================
+Wed Oct 16 21:21:42 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+bandit7@bandit:~$ ls
+data.txt
+bandit7@bandit:~$ cat data.txt \[K| grep millionth.[K
+millionth	cvX2JJa4CFALtqS87jk27qwqGhBM9plV
+bandit7@bandit:~$ exit
+logout
+===================================
+Wed Oct 16 21:23:03 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+bandit8@bandit:~$ cat data.txt | sort | uniq -u
+UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR
+bandit8@bandit:~$ exit
+logout
+===================================
+Wed Oct 16 21:24:56 UTC 2019
+Linux bandit 4.18.12 x86_64 GNU/Linux
+               
+      ,----..            ,----,          .---. 
+     /   /   \         ,/   .`|         /. ./|
+    /   .     :      ,`   .'  :     .--'.  ' ;
+   .   /   ;.  \   ;    ;     /    /__./ \ : |
+  .   ;   /  ` ; .'___,/    ,' .--'.  '   \' .
+  ;   |  ; \ ; | |    :     | /___/ \ |    ' ' 
+  |   :  | ; | ' ;    |.';  ; ;   \  \;      : 
+  .   |  ' ' ' : `----'  |  |  \   ;  `      |
+  '   ;  \; /  |     '   :  ;   .   \    .\  ; 
+   \   \  ',  /      |   |  '    \   \   ' \ |
+    ;   :    /       '   :  |     :   '  |--"  
+     \   \ .'        ;   |.'       \   \ ;     
+  www. `---` ver     '---' he       '---" ire.org     
+               
+              
+Welcome to OverTheWire!
+
+If you find any problems, please report them to Steven or morla on
+irc.overthewire.org.
+
+--[ Playing the games ]--
+
+  This machine might hold several wargames. 
+  If you are playing "somegame", then:
+
+    * USERNAMES are somegame0, somegame1, ...
+    * Most LEVELS are stored in /somegame/.
+    * PASSWORDS for each level are stored in /etc/somegame_pass/.
+
+  Write-access to homedirectories is disabled. It is advised to create a
+  working directory with a hard-to-guess name in /tmp/.  You can use the
+  command "mktemp -d" in order to generate a random and hard to guess
+  directory in /tmp/.  Read-access to both /tmp/ and /proc/ is disabled
+  so that users can not snoop on eachother. Files and directories with 
+  easily guessable or short names will be periodically deleted!
+	
+  Please play nice:
+      
+    * don't leave orphan processes running
+    * don't leave exploit-files laying around
+    * don't annoy other players
+    * don't post passwords or spoilers
+    * again, DONT POST SPOILERS! 
+      This includes writeups of your solution on your blog or website!
+
+--[ Tips ]--
+
+  This machine has a 64bit processor and many security-features enabled
+  by default, although ASLR has been switched off.  The following
+  compiler flags might be interesting:
+
+    -m32                    compile for 32bit
+    -fno-stack-protector    disable ProPolice
+    -Wl,-z,norelro          disable relro 
+
+  In addition, the execstack tool can be used to flag the stack as
+  executable on ELF binaries.
+
+  Finally, network-access is limited for most levels by a local
+  firewall.
+
+--[ Tools ]--
+
+ For your convenience we have installed a few usefull tools which you can find
+ in the following locations:
+
+    * pwndbg (https://github.com/pwndbg/pwndbg) in /usr/local/pwndbg/
+    * peda (https://github.com/longld/peda.git) in /usr/local/peda/
+    * gdbinit (https://github.com/gdbinit/Gdbinit) in /usr/local/gdbinit/
+    * pwntools (https://github.com/Gallopsled/pwntools)
+    * radare2 (http://www.radare.org/)
+    * checksec.sh (http://www.trapkit.de/tools/checksec.html) in /usr/local/bin/checksec.sh
+
+--[ More information ]--
+
+  For more information regarding individual wargames, visit
+  http://www.overthewire.org/wargames/
+
+  For support, questions or comments, contact us through IRC on
+  irc.overthewire.org #wargames.
+
+  Enjoy your stay!
+
+bandit9@bandit:~$ strings data.txt | grep =
+2========== the
+========== password
+>t=	yP
+rV~dHm=
+========== isa
+=FQ?P\U
+=	F[
+pb=x
+J;m=
+=)$=
+========== truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
+iv8!=
+bandit9@bandit:~$ timed out waiting for input: auto-logout
